@@ -17,9 +17,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-@WebServlet("/registUserServlet")
-public class RegistUserServlet extends HttpServlet {
-
+@WebServlet("/loginServlet")
+public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //验证码校验
@@ -44,10 +43,11 @@ public class RegistUserServlet extends HttpServlet {
             return;
         }
 
-        //1.获取数据
-        Map<String, String[]> map = request.getParameterMap();
 
-        //2.封装对象
+
+        //1.获取用户名和密码数据
+        Map<String, String[]> map = request.getParameterMap();
+        //2.封装User对象
         User user = new User();
         try {
             BeanUtils.populate(user, map);
@@ -57,30 +57,37 @@ public class RegistUserServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        //3.调用service完成注册
+        //3.调用Service查询
         UserService userService = new UserServiceImpl();
-        boolean flag = userService.regist(user);
+        User u = userService.login(user);
 
-        //4.响应结果
         ResultInfo info = new ResultInfo();
-        if(flag){
-            //注册成功
-            info.setFlag(true);
-        }else {
-            //注册失败
+        //4.判断
+        if (u == null) {
+            //用户名密码错误
             info.setFlag(false);
-            info.setErrorMsg("注册失败,用户名已存在!");
+            info.setErrorMsg("用户名或密码错误!");
         }
-        //将info对象序列化为json
+        //4.2 判断用户是否激活
+        if (u != null && !"Y".equals(u.getStatus())) {
+            //用户尚未激活
+            info.setFlag(false);
+            info.setErrorMsg("您尚未激活,请登录邮箱激活");
+        }
+        //4.3 判断登录成功
+        if (u != null && "Y".equals(u.getStatus())) {
+            info.setFlag(true);
+        }
+
+        request.getSession().setAttribute("user",u);
+
+        //响应数据
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(info);
-        //将json数据写回客户端,使用response的输出流
-        //设置context-type
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(json);   //字符流
+        objectMapper.writeValue(response.getOutputStream(), info);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request,response);
+        this.doPost(request, response);
     }
 }

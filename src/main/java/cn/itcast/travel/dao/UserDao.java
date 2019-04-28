@@ -29,4 +29,12 @@ public interface UserDao {
      * @param user
      */
     void updateStatus(User user);
+
+    /**
+     * 根据用户名和密码查询用户
+     * @param username
+     * @param password
+     * @return
+     */
+    User findByUsernameAndPassword(String username, String password);
 }
