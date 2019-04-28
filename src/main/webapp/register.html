@@ -152,7 +152,7 @@
                 if (checkUsername() && checkPassword() && checkEmail() && checkName() && checkTelephone() && checkBirthday() && checkCheck()) {
                     //校验通过,发送ajax请求,提交表单的数据
                     //jquery的serialize()方法可以将表单中的数据转换为字符串
-                    $.post("registUserServlet", $(this).serialize(), function (data) {
+                    $.post("user/regist", $(this).serialize(), function (data) {
                         //处理服务器响应的数据    data{flag:boolean,errorMsg:String,}
                         if(data.flag){
                             //注册成功,跳转成功页面

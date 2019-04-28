@@ -44,7 +44,7 @@
                 //点击登录后验证验证码
                 if (checkCheck()){
                     //2.发送ajax请求,计较表单数据
-                    $.post("loginServlet",$("#loginForm").serialize(),function (data) {
+                    $.post("user/login",$("#loginForm").serialize(),function (data) {
                         //data {flag:boolean,errorMsg:String}
                         //3.处理响应结果
                         if (data.flag){
