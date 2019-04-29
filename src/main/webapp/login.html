@@ -35,10 +35,12 @@
 
             return flag;
         }
-        //验证框失去焦点验证
-        $("#check").blur(checkCheck);
 
         $(function () {
+
+            //验证框失去焦点验证
+            $("#check").blur(checkCheck);
+
             //1.给登录按钮绑定单击事件
             $("#btn_sub").click(function () {
                 //点击登录后验证验证码
