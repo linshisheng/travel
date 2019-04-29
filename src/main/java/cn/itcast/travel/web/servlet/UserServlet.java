@@ -45,8 +45,7 @@ public class UserServlet extends BaseServlet {
             info.setFlag(false);
             info.setErrorMsg("验证码错误!");
             //将info对象序列化为json
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(info);
+            String json = writeValueAsString(info);
 
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(json);
@@ -81,8 +80,7 @@ public class UserServlet extends BaseServlet {
             info.setErrorMsg("注册失败,用户名已存在!");
         }
         //将info对象序列化为json
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(info);
+        String json = writeValueAsString(info);
         //将json数据写回客户端,使用response的输出流
         //设置context-type
         response.setContentType("application/json;charset=utf-8");
@@ -111,8 +109,7 @@ public class UserServlet extends BaseServlet {
             info.setFlag(false);
             info.setErrorMsg("验证码错误!");
             //将info对象序列化为json
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(info);
+            String json = writeValueAsString(info);
 
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(json);
@@ -156,9 +153,7 @@ public class UserServlet extends BaseServlet {
         request.getSession().setAttribute("user",u);
 
         //响应数据
-        ObjectMapper objectMapper = new ObjectMapper();
-        response.setContentType("application/json;charset=utf-8");
-        objectMapper.writeValue(response.getOutputStream(), info);
+        writeValue(info,response);
     }
 
     /**
@@ -172,9 +167,7 @@ public class UserServlet extends BaseServlet {
         //从session中获取登录用户
         Object user = request.getSession().getAttribute("user");
         //将user写回客户端
-        ObjectMapper objectMapper = new ObjectMapper();
-        response.setContentType("application/json;charset=utf-8");
-        objectMapper.writeValue(response.getOutputStream(),user);
+        writeValue(user,response);
     }
 
     /**
