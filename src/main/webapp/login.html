@@ -20,8 +20,48 @@
     <script src="js/jquery-3.3.1.js"></script>
 
     <script>
+        //校验用户名: 单词字符8-20位
+        function checkUsername() {
+            //1.获取用户名的值
+            var username = $("#username").val();
+            //2.定义正则表达式
+            var reg_username = /^\w{8,20}$/;
+            //3.判断,给出提示信息
+            var flag = reg_username.test(username);
 
-        //验证码验证方法
+            if (flag) {
+                //用户名合法
+                $("#username").css("border", "");
+            } else {
+                //用户名非法,加一个边框
+                $("#username").css("border", "1px solid red");
+            }
+
+            return flag;
+        }
+
+        //校验密码: 单词字符8-20位
+        function checkPassword() {
+            //1.获取用户名的值
+            var password = $("#password").val();
+            //2.定义正则表达式
+            var reg_password = /^\w{8,20}$/;
+            //3.判断,给出提示信息
+            var flag = reg_password.test(password);
+
+            if (flag) {
+                //用户名合法
+                $("#password").css("border", "");
+            } else {
+                //用户名非法,加一个边框
+                $("#password").css("border", "1px solid red");
+            }
+
+            return flag;
+        }
+
+
+        // 7.验证码: 非空
         function checkCheck() {
             var check = $("#check").val();
             var reg_check = /\S/;
@@ -38,13 +78,15 @@
 
         $(function () {
 
-            //验证框失去焦点验证
+            //失去焦点验证
             $("#check").blur(checkCheck);
+            $("#username").blur(checkUsername);
+            $("#password").blur(checkPassword);
 
             //1.给登录按钮绑定单击事件
             $("#btn_sub").click(function () {
                 //点击登录后验证验证码
-                if (checkCheck()){
+                if (checkCheck()&&checkUsername()&&checkPassword()){
                     //2.发送ajax请求,计较表单数据
                     $.post("user/login",$("#loginForm").serialize(),function (data) {
                         //data {flag:boolean,errorMsg:String}
@@ -82,8 +124,8 @@
             <div id="errorMsg" class="alert alert-danger"></div>
             <form id="loginForm" action="" method="post" accept-charset="utf-8">
                 <input type="hidden" name="action" value="login"/>
-                <input name="username" type="text" placeholder="请输入账号" autocomplete="off">
-                <input name="password" type="text" placeholder="请输入密码" autocomplete="off">
+                <input id="username" name="username" type="text" placeholder="请输入用户名" autocomplete="off">
+                <input id="password" name="password" type="text" placeholder="请输入密码" autocomplete="off">
                 <div class="verify">
                     <input id="check" name="check" type="text" placeholder="请输入验证码" autocomplete="off">
                     <span><img src="checkCode" alt="" onclick="changeCheckCode(this)"></span>
