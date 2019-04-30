@@ -147,10 +147,12 @@ public class UserServlet extends BaseServlet {
         }
         //4.3 判断登录成功
         if (u != null && "Y".equals(u.getStatus())) {
+            //登录成功标记
+            request.getSession().setAttribute("user",u);
+            //登录成功
             info.setFlag(true);
         }
 
-        request.getSession().setAttribute("user",u);
 
         //响应数据
         writeValue(info,response);
